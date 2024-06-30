@@ -1,1 +1,3 @@
-# python_exercises
+# Welcome! 
+
+This repository contains python exercises!
