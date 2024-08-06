@@ -114,3 +114,167 @@ plt.show()
 
 ############################################################################################
 
+"""
+Using pandas to import flat files as DataFrames(1)
+
+"""
+
+import pandas as pd
+
+file = 'csv_files/titanic_sub.csv'
+df = pd.read_csv(file)
+
+df.head()
+
+############################################################################################
+
+"""
+Using pandas to import flat files as DataFrames(2)
+
+In the last exercise, you were able to import flat files into a pandas DataFrame. 
+As a bonus, it is then straightforward to retrieve the corresponding numpy array using the method .to_numpy(). 
+You'll now have a chance to do this using the MNIST dataset.
+
+Instructions
+-Import the first 5 rows of the file into a DataFrame using the function pd.read_csv() and assign the result to data.
+ You'll need to use the arguments nrows and header (there is no header in this file).
+-Build a numpy array from the resulting DataFrame in data and assign to data_array.
+-Execute print(type(data_array)) to print the datatype of data_array.
+
+"""
+import pandas as pd
+
+file = 'csv_files/mnist_kaggle_some_rows.csv'
+
+# Read the first 5 rows of the file into a DataFrame: data
+data = pd.read_csv(file, nrows=5, header=None)
+
+# Build a numpy array from the DataFrame: data_array
+data_array = data.to_numpy()
+
+# Print the datatype of data_array to the shell
+print(type(data_array))
+
+############################################################################################
+
+"""
+Customizing you pandas import
+
+The pandas package is great at dealing with many of the issues you will encounter when importing data as a data scientist, 
+such as comments occurring in flat files, empty lines and missing values (NA or NaN). 
+To wrap up this chapter, you're going to import a corrupted copy of the Titanic dataset titanic_corrupt.txt, which contains comments after the character '#', and is tab-delimited.
+
+Instructions
+-   Complete the sep (the pandas version of delimiter), comment and na_values arguments of pd.read_csv(). 
+    comment takes characters that comments occur after in the file, which in this case is '#'. 
+    na_values takes a list of strings to recognize as NA/NaN, in this case the string 'Nothing'.
+-   Execute the rest of the code to print the head of the resulting DataFrame and plot the histogram of the 'Age' of passengers aboard the Titanic.
+
+"""
+
+# Import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+
+# Assign filename: file
+file = 'csv_files/titanic_sub.csv'
+
+# Import file: data
+data = pd.read_csv(file, sep=',', comment='#', na_values='Nothing')
+
+# Print the head of the DataFrame
+print(data.head())
+
+# Plot 'Age' variable in a histogram
+pd.DataFrame.hist(data[['Age']])
+plt.xlabel('Age (years)')
+plt.ylabel('count')
+plt.show()
+
+############################################################################################
+
+"""
+Listing sheets in Excel files
+
+Specifically, you'll be loading and checking out the spreadsheet 'battledeath.xlsx', modified from the Peace Research Institute Oslo's (PRIO) dataset. 
+This data contains age-adjusted mortality rates due to war in various countries over several years.
+
+Instructions
+- Assign the spreadsheet filename (provided above) to the variable file.
+- Pass the correct argument to pd.ExcelFile() to load the file using pandas, assigning the result to the variable xls.
+- Print the sheetnames of the Excel spreadsheet by passing the necessary argument to the print() function.
+
+"""
+
+# Import pandas
+import pandas as pd
+
+# Assign spreadsheet filename: file
+file = 'files/battledeath.xlsx'
+
+# Load spreadsheet: xls
+xls = pd.ExcelFile(file)
+
+# Print sheet names
+print(xls.sheet_names)
+
+############################################################################################
+
+"""
+Importing sheets from Excel files
+
+In the previous exercises, you saw that the Excel file contains two sheets, '2002' and '2004'. The next step is to import these.
+
+In this exercise, you'll learn how to import any given sheet of your loaded .xlsx file as a DataFrame. 
+You'll be able to do so by specifying either the sheet's name or its index.
+
+Instructions
+- Load the sheet '2004' into the DataFrame df1 using its name as a string.
+- Print the head of df1 to the shell.
+- Load the sheet 2002 into the DataFrame df2 using its index (0).
+- Print the head of df2 to the shell.
+
+"""
+
+# Load a sheet into a DataFrame by name: df1
+df1 = xls.parse('2004')
+
+# Print the head of the DataFrame df1
+print(df1.head())
+
+# Load a sheet into a DataFrame by index: df2
+df2 = xls.parse(0)
+
+# Print the head of the DataFrame df2
+print(df2.head())
+
+############################################################################################
+
+"""
+Customizing your spreadsheet import
+
+Here, you'll parse your spreadsheets and use additional arguments to skip rows, rename columns and select only particular columns.
+
+You'll add the additional arguments skiprows, names and usecols. These skip rows, name the columns and designate which columns to parse, respectively. 
+All these arguments can be assigned to lists containing the specific row numbers, strings and column numbers, as appropriate.
+
+Instructions
+-   Parse the first sheet by index. In doing so, skip the first row of data and name the columns 'Country' and 'AAM due to War (2002)' using the argument names.
+    The values passed to skiprows and names all need to be of type list.
+-   Parse the second sheet by index. In doing so, parse only the first column with the usecols parameter, skip the first row and rename the column 'Country'.
+    The argument passed to usecols also needs to be of type list.
+
+"""
+
+# Parse the first sheet and rename the columns: df1
+df1 = xls.parse(0, skiprows=[0], names=['Country', 'AAM due to War (2002)'])
+
+# Print the head of the DataFrame df1
+print(df1.head())
+
+# Parse the first column of the second sheet and rename the column: df2
+df2 = xls.parse(1, usecols=[0], skiprows=[0], names=['Country'])
+
+# Print the head of the DataFrame df2
+print(df2.head())
+
+############################################################################################
